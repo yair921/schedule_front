@@ -1,0 +1,33 @@
+
+#divLoginInside{
+    text-align: center;
+    border: solid 1px white;
+    padding: 25px 10px;
+    margin-top: 40px;
+    border-radius: 5px;
+    -webkit-box-shadow: 13px 17px 5px 1px rgba(0,0,0,0.32);
+    -moz-box-shadow: 13px 17px 5px 1px rgba(0,0,0,0.32);
+    box-shadow: 13px 17px 5px 1px rgba(0,0,0,0.32);
+    background-color: white;
+}
+#titleLogin{
+    color:#5C5B99;
+    padding-bottom: 10PX;
+    border-bottom:solid 3px #5C5B99;
+}
+
+#divLogin{
+    background-color: #5C5B99;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+
+.imgLogin{
+    margin:10px;
+    object-fit: cover;
+    height: 30%;
+    width: 30%;
+    border: solid 1px gray;
+    border-radius: 5px;
+}
