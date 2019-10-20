@@ -1,0 +1,19 @@
+.divLoadingContain {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(56, 52, 44, 0.7);
+    top: 0;
+    left: 0;
+    z-index: 99999;
+}
+
+.divLoadingCentral {
+    position: absolute;
+    left: 48%;
+    top: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+}

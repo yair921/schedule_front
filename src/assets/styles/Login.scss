@@ -1,7 +1,14 @@
+#divLogin{
+    //background-color: rgb(18, 144, 175);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background-size:cover;
+}
 
 #divLoginInside{
     text-align: center;
-    border: solid 1px white;
+    border: solid 1px rgba(0,0,0,0.32);
     padding: 25px 10px;
     margin-top: 40px;
     border-radius: 5px;
@@ -11,17 +18,11 @@
     background-color: white;
 }
 #titleLogin{
-    color:#5C5B99;
+    color:rgb(18, 144, 175);
     padding-bottom: 10PX;
-    border-bottom:solid 3px #5C5B99;
+    border-bottom:solid 3px rgb(18, 144, 175);
 }
 
-#divLogin{
-    background-color: #5C5B99;
-    height: 100%;
-    width: 100%;
-    position: fixed;
-}
 
 .imgLogin{
     margin:10px;

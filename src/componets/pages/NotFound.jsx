@@ -1,6 +1,6 @@
 import React from 'react';
 //import { Redirect } from 'react-router-dom';
-import '../assets/styles/Notfound.scss';
+import '../../assets/styles/Notfound.scss';
 
 const NotFound = () => {
     return (
