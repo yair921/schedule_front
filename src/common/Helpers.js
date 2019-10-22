@@ -3,20 +3,26 @@ const Config = require('../../config.js');
 
 class Helpers {
 
-    static async post(query, abort) {
+    static async post(query) {
         const url = Config.urls.api;
         const opts = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ query })
         };
-        let result = await fetch(url, opts)
-            .catch(err => {
-                return {
-                    status: false,
-                    message: err
-                };
-            });
+        let result = await fetch(url, opts).catch(err => {
+            console.error(`Method Helpers.post Error -> ${err}`);
+            return {
+                status: false,
+                message: Config.messages.genericError
+            };
+        });
+        if (!result.status) {
+            return {
+                status: false,
+                message: Config.messages.genericError
+            };
+        }
         result = await result.json();
         return {
             status: true,

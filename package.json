@@ -29,7 +29,6 @@
   "dependencies": {
     "@babel/polyfill": "^7.6.0",
     "graphql": "^14.5.8",
-    "materialize-css": "^1.0.0-rc.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-router-dom": "^5.1.2",

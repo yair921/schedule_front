@@ -8,7 +8,6 @@ import NotFound from '../componets/pages/NotFound.jsx';
 import Config from '../../config.js';
 import Storage from '../common//Storage.js';
 import '../assets/styles/App.scss';
-import 'materialize-css/dist/css/materialize.min.css';
 
 class App extends React.Component {
     render() {
