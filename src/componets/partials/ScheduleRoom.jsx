@@ -10,7 +10,14 @@ class ScheduleRoom extends Component {
 
     render() {
         return (
-            <div>ScheduleRoom!</div>
+            <div>
+                <table>
+                    <tr>
+                        <th>Horas</th>
+                        <th>Sala 1</th>
+                    </tr>
+                </table>
+            </div>
         );
     }
 }
