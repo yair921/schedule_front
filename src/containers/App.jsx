@@ -3,7 +3,8 @@ import { Route, Switch, Redirect, HashRouter } from 'react-router-dom';
 import Layout from '../componets/layouts/Layout.jsx';
 import LayoutLogin from '../componets/layouts/LayoutLogin.jsx';
 import Login from '../componets/pages/Login.jsx';
-import Schedule from '../componets/partials/Schedule.jsx';
+import Schedule from '../componets/pages/Schedule.jsx';
+import Welcome from '../componets/pages/Welcome.jsx';
 import NotFound from '../componets/pages/NotFound.jsx';
 import Config from '../../config.js';
 import Storage from '../common//Storage.js';
@@ -17,8 +18,8 @@ class App extends React.Component {
                     <AppPrivate exact path="/" layout={LayoutLogin} component={Login} />
                     <AppPublic exact path="/login" layout={LayoutLogin} component={Login} />
                     <AppPrivate exact path="/schedule" layout={Layout} component={Schedule} />
-                    {/*<AppPrivate exact path="/users" layout={Layout} component={Users} />
-                    <AppPrivate exact path="/risks" layout={Layout} component={Risks} />
+                    <AppPrivate exact path="/welcome" layout={Layout} component={Welcome} />
+                    {/*<AppPrivate exact path="/risks" layout={Layout} component={Risks} />
                     <AppPrivate exact path="/activities" layout={Layout} component={Activities} />
                     <AppPrivate exact path="/notifications" layout={Layout} component={Notifications} />
                     <AppPrivate exact path="/administrators" layout={Layout} component={Admins} /> */}

@@ -39,7 +39,7 @@ class Login extends Component {
 
         } else {
             Storage.setAuthentication(result.data.getLogin.token);
-            this.props.history.push('/schedule');
+            this.props.history.push('/welcome');
         }
     }
 
