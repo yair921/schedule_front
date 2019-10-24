@@ -1,0 +1,21 @@
+.divScheduleRoom{
+    max-width:200px;
+    min-width: 200px;
+    min-height: 500px;
+    float: left;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin: 4px;
+
+    padding: 4px;
+    display: block;
+    transition: .3s;
+    flex-shrink: 0;    
+    position: relative;
+}
+.divScheduleRoomTitle{
+    text-align: center;
+    font-weight: bold;
+    color: #19BDC8;
+    border-bottom: 1px solid #19BDC8;
+}

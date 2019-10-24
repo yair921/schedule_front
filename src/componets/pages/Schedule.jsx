@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Storage from '../../common/Storage.js';
 import ScheduleRoom from '../partials/ScheduleRoom.jsx';
+import '../../assets/styles/Schedule.scss';
 import '../../assets/styles/Common.scss';
 
 
@@ -16,7 +17,7 @@ export default class Schedule extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col l12">
+                    <div className="col s12 l12">
                         <div className="card-content valign center-block">
                             <h5>Programación</h5>
                         </div>
@@ -48,7 +49,15 @@ export default class Schedule extends Component {
                         <input type="date" id="dateDateEnd" name="Fecha Inicial"></input>
                     </div> */}
                 </div>
-                <ScheduleRoom />
+                <div className="divScheduleRoomMain">
+                    <ScheduleRoom room="Sala 1" />
+                    <ScheduleRoom room="Sala 2" />
+                    <ScheduleRoom room="Sala 3" />
+                    <ScheduleRoom room="Sala 4" />
+                    <ScheduleRoom room="Sala 5" />
+                    <ScheduleRoom room="Sala 6" />
+                    <ScheduleRoom room="Sala 7" />
+                </div>
             </div>
         );
     }

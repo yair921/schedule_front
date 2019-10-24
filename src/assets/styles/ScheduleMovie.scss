@@ -1,0 +1,38 @@
+.divScheduleMovie{
+    width: 100%;
+    // min-height: 150px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    transition:.3s;
+}
+
+.divScheduleMovie:hover{
+    -webkit-box-shadow: 4px 7px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 7px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 4px 7px 5px 0px rgba(0,0,0,0.75);
+}
+
+.divScheduleMovie:hover>.divScheduleMovieTime{
+    color: #19BDC8;
+    text-shadow: 0 0 90px #19BDC8;
+}
+
+.divScheduleMovieMovie{
+    width: 100%;
+    font-weight: bold;
+    font-size: medium;
+    text-align: center;
+}
+
+.divScheduleMovieTime{
+    width: 100%;
+    text-align: center;
+    font-size: small;
+    transition:.3s;
+}
+
+.divScheduleMovieOption{
+    text-align: center;
+}
