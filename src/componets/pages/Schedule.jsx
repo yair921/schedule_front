@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Storage from '../../common/Storage.js';
 import ScheduleRoom from '../partials/ScheduleRoom.jsx';
 import '../../assets/styles/Schedule.scss';
-import '../../assets/styles/Common.scss';
+//import '../../assets/styles/Common.scss';
 
 
 export default class Schedule extends Component {
@@ -16,15 +16,11 @@ export default class Schedule extends Component {
         }
         return (
             <div>
-                <div className="row">
-                    <div className="col s12 l12">
-                        <div className="card-content valign center-block">
-                            <h5>Programación</h5>
-                        </div>
-                    </div>
+                <div className="divTitle">
+                    Programación
                 </div>
                 <div className="row">
-                    <div className="col l6">
+                    <div className="col s12 l5">
                         <label>Teatro</label>
                         <select id="ddlTeather" name="Teatro" style={ddStyle}>
                             <option value="0">Seleccione un Teatro</option>
@@ -32,23 +28,19 @@ export default class Schedule extends Component {
                             <option value="2">Aves María</option>
                         </select>
                     </div>
-                    <div className="col l6">
-                        <label>Fechas</label>
+                    <div className="col s12 l5">
+                        <label>Período</label>
                         <select id="ddlDates" name="Fechas" style={ddStyle}>
-                            <option value="0">Seleccione un rango de fechas</option>
+                            <option value="0">Seleccione un período</option>
                             <option value="1">14/10/2019 - 20/10/2019</option>
                             <option value="1">07/10/2019 - 13/10/2019</option>
                         </select>
                     </div>
-                    {/* <div className="col l4">
-                        <label>Fecha Inicial</label>
-                        <input type="date" id="dateDateStart" name="Fecha Inicial"></input>
+                    <div className="col s12 l2 right-align">
+                        <a className="waves-effect waves-light btn-small">Guardar</a>
                     </div>
-                    <div className="col l4">
-                        <label>Fecha Final</label>
-                        <input type="date" id="dateDateEnd" name="Fecha Inicial"></input>
-                    </div> */}
                 </div>
+                <div className="divDivider"></div>
                 <div className="divScheduleRoomMain">
                     <ScheduleRoom room="Sala 1" />
                     <ScheduleRoom room="Sala 2" />

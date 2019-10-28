@@ -21,5 +21,25 @@ let queries = {
                message 
                token 
            } 
-         }`
+         }`,
+    getAllPeriod: `{
+        getAllPeriod(token:"{token}"){
+            status
+            message
+            data{
+                _id
+                flag
+                dateFrom
+                dateUp
+                active
+            }
+        }
+    }`,
+    addPeriod:`mutation {
+        addPeriod(token:"{token}",input:{flag:"{flag}",dateFrom:"{dateFrom}",dateUp:"{dateUp}"}){
+            status
+            message
+            _id
+          }
+        }`
 }
