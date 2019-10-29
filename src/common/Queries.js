@@ -35,11 +35,17 @@ let queries = {
             }
         }
     }`,
-    addPeriod:`mutation {
+    addPeriod: `mutation {
         addPeriod(token:"{token}",input:{flag:"{flag}",dateFrom:"{dateFrom}",dateUp:"{dateUp}"}){
             status
             message
             _id
           }
-        }`
+        }`,
+    deletePeriod: `mutation {
+        deletePeriod(token:"{token}",_id:"{_id}"){
+          status
+          message
+        }
+      }`
 }
