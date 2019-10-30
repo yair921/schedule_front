@@ -193,11 +193,17 @@ class Helpers {
         return date;
     }
 
-    static convertDate(date) {
+    static convertDate(date, hardDate) {
+        let result;
         if (typeof (date) === 'string')
             date = parseInt(date);
-        let result = new Date(date).toISOString();
-        result = result.substr(0, 10);
+        let convertDate = new Date(date);
+        if (hardDate) {
+            result = convertDate;
+        } else {
+            result = convertDate.toISOString();
+            result = result.substr(0, 10);
+        }
         return result;
     }
 

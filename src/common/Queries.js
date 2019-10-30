@@ -47,5 +47,63 @@ let queries = {
           status
           message
         }
+      }`,
+    getAllTheater:`{
+        getAllTheater(token:"{token}"){
+          status
+          message
+          data{
+            _id
+            nombre
+            active
+          }
+        }
+      }`,
+    getAllSchedule:`{
+        getAllSchedule(token:"{token}"){
+        status
+        message
+        data{
+          _id
+          idPeriod
+          idTheater
+          rooms{
+            idRoom
+            movies{
+              idMovie
+              trailer
+              short
+              pattern
+              startAt
+              startAt
+              endAt
+            }
+          }
+          active
+        }
+      }
+    }`,
+    getOneSchedule:`{
+        getOneSchedule(token:"{token}",idTheater:"{idTheater}",idPeriod:"{idPeriod}"){
+          status
+          message
+          data{
+            _id
+            idPeriod
+            idTheater
+            rooms{
+              idRoom
+              movies{
+                idMovie
+                trailer
+                short
+                pattern
+                startAt
+                endAt
+              }
+            }
+            active
+          }
+        }
       }`
 }

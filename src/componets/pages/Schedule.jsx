@@ -1,13 +1,129 @@
+const Queries = require('../../common/Queries.js');
 import React, { Component } from 'react';
+import Helpers from '../../common/Helpers.js';
 import Storage from '../../common/Storage.js';
 import ScheduleRoom from '../partials/ScheduleRoom.jsx';
 import '../../assets/styles/Schedule.scss';
-//import '../../assets/styles/Common.scss';
 
 
 export default class Schedule extends Component {
+
+    state = {
+        theaters: [],
+        periods: [],
+        schedule: null
+    }
+
     constructor(props) {
         super(props);
+    }
+
+    getAllTheater = async () => {
+        try {
+            let method = 'getAllTheater';
+            let token = Storage.tokenSession;
+            let query = Queries.getQuery(method, { token });
+            let result = await Helpers.post(query);
+            if (!result.status) {
+                Helpers.showAlertError(result.message)
+            } else if (!result.data[method].status) {
+                Helpers.showAlertError(result.message)
+            } else {
+                this.setState({
+                    theaters: result.data[method].data.reverse()
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    getAllPeriod = async () => {
+        try {
+            let method = 'getAllPeriod';
+            let token = Storage.tokenSession;
+            let query = Queries.getQuery(method, { token });
+            let result = await Helpers.post(query);
+            if (!result.status) {
+                Helpers.showAlertError(result.message)
+            } else if (!result.data[method].status) {
+                Helpers.showAlertError(result.message)
+            } else {
+                this.setState({
+                    periods: result.data[method].data.reverse()
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    getOneSchedule = async () => {
+        try {
+
+            let fields = ['ddlTheater', 'ddlPeriod'];
+            if (!Helpers.validateFields(fields)) {
+                //this.closeLoading();
+                return;
+            }
+
+            let idTheater = Helpers.getValue('ddlTheater');
+            let idPeriod = Helpers.getValue('ddlPeriod');
+
+            if (idTheater === '0' || idPeriod === '0')
+                return;
+
+            console.log(idTheater)
+            console.log(idPeriod)
+
+            let method = 'getOneSchedule';
+            let token = Storage.tokenSession;
+            let query = Queries.getQuery(method, { token, idTheater, idPeriod });
+            let result = await Helpers.post(query);
+            if (!result.status) {
+                Helpers.showAlertError(result.message)
+            } else if (!result.data[method].status) {
+                Helpers.showAlertError(result.message)
+            } else {
+                console.log(result.data[method].data);
+                let data = this.processScheduleResult(result.data[method].data);
+                console.log(data);
+                // this.setState({
+                //     schedule: result.data[method]
+                // });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    processScheduleResult = (data) => {
+        return {
+            ...data,
+            rooms: data.rooms.map(r => {
+                return {
+                    ...r,
+                    movies: r.movies.map(m => {
+                        return {
+                            ...m,
+                            startAt: Helpers.convertDate(m.startAt, true),
+                            endAt: Helpers.convertDate(m.endAt, true)
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+    componentDidMount = async () => {
+        try {
+
+            await this.getAllPeriod();
+            await this.getAllTheater();
+            this.getOneSchedule();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     render() {
@@ -22,18 +138,27 @@ export default class Schedule extends Component {
                 <div className="row">
                     <div className="col s12 l5">
                         <label>Teatro</label>
-                        <select id="ddlTeather" name="Teatro" style={ddStyle}>
-                            <option value="0">Seleccione un Teatro</option>
-                            <option value="1">Mayorca</option>
-                            <option value="2">Aves María</option>
+                        <select id="ddlTheater" name="Teatro" style={ddStyle} onChange={this.getOneSchedule}>
+                            <option value="0">--- Seleccione un Teatro ---</option>
+                            {
+                                this.state.theaters.map((theater, index) => {
+                                    return (
+                                        <option key={index} value={theater._id}>{theater.nombre}</option>
+                                    )
+                                })
+                            }
                         </select>
                     </div>
                     <div className="col s12 l5">
                         <label>Período</label>
-                        <select id="ddlDates" name="Fechas" style={ddStyle}>
-                            <option value="0">Seleccione un período</option>
-                            <option value="1">14/10/2019 - 20/10/2019</option>
-                            <option value="1">07/10/2019 - 13/10/2019</option>
+                        <select id="ddlPeriod" name="Periodo" style={ddStyle} onChange={this.getOneSchedule}>
+                            {
+                                this.state.periods.map((period, index) => {
+                                    return (
+                                        <option key={index} value={period._id}>{`${Helpers.convertDate(period.dateFrom)} - ${Helpers.convertDate(period.dateUp)} (${period.flag})`}</option>
+                                    )
+                                })
+                            }
                         </select>
                     </div>
                     <div className="col s12 l2 right-align">

@@ -17,75 +17,83 @@ class Period extends Component {
     }
 
     save = async () => {
-        this.handleLoading();
-        let fields = ['txtPeriodFlag', 'datePeriodStart', 'datePeriodEnd'];
-        if (!Helpers.validateFields(fields)) {
-            this.closeLoading();
-            return;
-        }
-        let method = 'addPeriod';
-        let token = Storage.tokenSession;
-        let flag = Helpers.getValue('txtPeriodFlag');
-        let dateFrom = Helpers.getValue('datePeriodStart');
-        let dateUp = Helpers.getValue('datePeriodEnd');
-        let query = Queries.getQuery(method, { token, flag, dateFrom, dateUp });
-        let result = await Helpers.post(query);
-        if (!result.status) {
-            this.closeLoading();
-            Helpers.showAlertError(result.message);
-        } else if (!result.data[method].status) {
-            this.closeLoading();
-            Helpers.showAlertError(result.data[method].message);
-        } else {
-            this.getPeriods();
-            this.closeLoading();
-            Helpers.showAlertAdd();
+        try {
+            this.handleLoading();
+            let fields = ['txtPeriodFlag', 'datePeriodStart', 'datePeriodEnd'];
+            if (!Helpers.validateFields(fields)) {
+                this.closeLoading();
+                return;
+            }
+            let method = 'addPeriod';
+            let token = Storage.tokenSession;
+            let flag = Helpers.getValue('txtPeriodFlag');
+            let dateFrom = Helpers.getValue('datePeriodStart');
+            let dateUp = Helpers.getValue('datePeriodEnd');
+            let query = Queries.getQuery(method, { token, flag, dateFrom, dateUp });
+            let result = await Helpers.post(query);
+            if (!result.status) {
+                this.closeLoading();
+                Helpers.showAlertError(result.message);
+            } else if (!result.data[method].status) {
+                this.closeLoading();
+                Helpers.showAlertError(result.data[method].message);
+            } else {
+                this.getPeriods();
+                this.closeLoading();
+                Helpers.showAlertAdd();
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
     getPeriods = async () => {
-        //this.handleLoading();
-        let method = 'getAllPeriod';
-        let token = Storage.tokenSession;
-        let query = Queries.getQuery(method, { token });
-        let result = await Helpers.post(query);
-        if (!result.status) {
-            Helpers.showAlertError(result.message)
-            //this.closeLoading();
-        } else if (!result.data[method].status) {
-            Helpers.showAlertError(result.message)
-            //this.closeLoading();
-        } else {
-            //this.closeLoading();
-            this.setState({
-                periods: result.data[method].data.reverse()
-            });
+        try {
+            let method = 'getAllPeriod';
+            let token = Storage.tokenSession;
+            let query = Queries.getQuery(method, { token });
+            let result = await Helpers.post(query);
+            if (!result.status) {
+                Helpers.showAlertError(result.message)
+            } else if (!result.data[method].status) {
+                Helpers.showAlertError(result.message)
+            } else {
+                this.setState({
+                    periods: result.data[method].data.reverse()
+                });
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
     deletePeriod = (_id) => {
         Helpers.showAlertConfirm('¿Confirma que desea eliminar este período?', async () => {
-            this.handleLoading();
-            let method = 'deletePeriod';
-            let token = Storage.tokenSession;
-            let query = Queries.getQuery(method, { token, _id });
-            let result = await Helpers.post(query);
-            if (!result.status) {
-                this.closeLoading();
-                Helpers.showAlertError(result.message)
-            } else if (!result.data[method].status) {
-                this.closeLoading();
-                Helpers.showAlertError(result.message)
-            } else {
-                this.getPeriods();
-                this.closeLoading();
-                Helpers.showAlertDelete();
+            try {
+                this.handleLoading();
+                let method = 'deletePeriod';
+                let token = Storage.tokenSession;
+                let query = Queries.getQuery(method, { token, _id });
+                let result = await Helpers.post(query);
+                if (!result.status) {
+                    this.closeLoading();
+                    Helpers.showAlertError(result.message)
+                } else if (!result.data[method].status) {
+                    this.closeLoading();
+                    Helpers.showAlertError(result.message)
+                } else {
+                    this.getPeriods();
+                    this.closeLoading();
+                    Helpers.showAlertDelete();
+                }
+            } catch (error) {
+                console.log(error);
             }
         });
     }
 
-    componentDidMount = async () => {
-        await this.getPeriods();
+    componentDidMount = () => {
+        this.getPeriods();
     }
 
     handleLoading = () => {
@@ -137,7 +145,6 @@ class Period extends Component {
                         </thead>
                         <tbody>
                             {
-                                //console.log(this.state.periods)
                                 this.state.periods.map((period, index) => {
                                     return (
                                         <tr key={index}>
@@ -151,14 +158,6 @@ class Period extends Component {
                                     );
                                 })
                             }
-                            {/* <tr>
-                                <td>Primera de Noviembre</td>
-                                <td>01/11/2019</td>
-                                <td>07/11/2019</td>
-                                <td>
-                                    <a className="waves-effect waves-light btn-small">Eliminar</a>
-                                </td>
-                            </tr> */}
                         </tbody>
                     </table>
                 </div>
