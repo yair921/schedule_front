@@ -11,24 +11,22 @@ class ScheduleRoom extends Component {
     }
 
     render() {
+        console.log(this.props)
         return (
             <div className="divScheduleRoom">
-                <div className="divScheduleRoomTitle">{this.props.room}</div>
-                <ScheduleMovie 
-                startTime="06:30"
-                movie="Rey León" 
-                endTime="08:30"
-                />
-                <ScheduleMovie 
-                startTime="08:30"
-                movie="Proyecto Génesis" 
-                endTime="10:30"
-                />
-                <ScheduleMovie 
-                startTime="10:30"
-                movie="The Joker" 
-                endTime="12:30"
-                />
+                <div className="divScheduleRoomTitle">{this.props.room.roomName}</div>
+                {
+                    this.props.room.movies.length > 0 ?
+                        this.props.room.movies.map((movie, index) => {
+                            return (
+                                <ScheduleMovie key={index} movie={movie} />
+                            )
+                        })
+                        : null
+                }
+                <div className="divScheduleRoomBtnAdd">
+                    <a id="btnAddMovie" className="waves-effect waves-light btn-small">Agregar</a>
+                </div>
             </div>
         );
     }

@@ -11,7 +11,8 @@ export default class Schedule extends Component {
     state = {
         theaters: [],
         periods: [],
-        schedule: null
+        schedule: [],
+        rooms: []
     }
 
     constructor(props) {
@@ -58,12 +59,28 @@ export default class Schedule extends Component {
         }
     }
 
+    getAllRoom = async () => {
+        try {
+            let method = 'getAllRoom';
+            let token = Storage.tokenSession;
+            let query = Queries.getQuery(method, { token });
+            let result = await Helpers.post(query);
+            if (!result.status) {
+                Helpers.showAlertError(result.message)
+            } else if (!result.data[method].status) {
+                Helpers.showAlertError(result.message)
+            } else {
+                return result.data[method].data;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     getOneSchedule = async () => {
         try {
-
             let fields = ['ddlTheater', 'ddlPeriod'];
             if (!Helpers.validateFields(fields)) {
-                //this.closeLoading();
                 return;
             }
 
@@ -73,9 +90,6 @@ export default class Schedule extends Component {
             if (idTheater === '0' || idPeriod === '0')
                 return;
 
-            console.log(idTheater)
-            console.log(idPeriod)
-
             let method = 'getOneSchedule';
             let token = Storage.tokenSession;
             let query = Queries.getQuery(method, { token, idTheater, idPeriod });
@@ -84,13 +98,20 @@ export default class Schedule extends Component {
                 Helpers.showAlertError(result.message)
             } else if (!result.data[method].status) {
                 Helpers.showAlertError(result.message)
+            } else if (Helpers.isNullOrEmpty(result.data[method].data)) {
+                let rooms = await this.getAllRoom();
+                //console.log(rooms);
+                this.setState({
+                    schedule: [],
+                    rooms: []
+                });
             } else {
-                console.log(result.data[method].data);
                 let data = this.processScheduleResult(result.data[method].data);
                 console.log(data);
-                // this.setState({
-                //     schedule: result.data[method]
-                // });
+                this.setState({
+                    schedule: data,
+                    rooms: data.rooms
+                });
             }
         } catch (error) {
             console.log(error);
@@ -117,7 +138,6 @@ export default class Schedule extends Component {
 
     componentDidMount = async () => {
         try {
-
             await this.getAllPeriod();
             await this.getAllTheater();
             this.getOneSchedule();
@@ -167,13 +187,15 @@ export default class Schedule extends Component {
                 </div>
                 <div className="divDivider"></div>
                 <div className="divScheduleRoomMain">
-                    <ScheduleRoom room="Sala 1" />
-                    <ScheduleRoom room="Sala 2" />
-                    <ScheduleRoom room="Sala 3" />
-                    <ScheduleRoom room="Sala 4" />
-                    <ScheduleRoom room="Sala 5" />
-                    <ScheduleRoom room="Sala 6" />
-                    <ScheduleRoom room="Sala 7" />
+                    {
+                        (this.state.rooms.length > 0) ?
+                            this.state.schedule.rooms.map((schedule, index) => {
+                                return (
+                                    <ScheduleRoom key={index} room={schedule} />
+                                );
+                            })
+                            : null
+                    }
                 </div>
             </div>
         );

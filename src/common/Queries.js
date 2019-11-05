@@ -93,14 +93,37 @@ let queries = {
             idTheater
             rooms{
               idRoom
+              roomName
+              roomNumber
               movies{
                 idMovie
+                movieName
+                duration
                 trailer
                 short
                 pattern
+                cleaningTime
                 startAt
                 endAt
               }
+            }
+            active
+          }
+        }
+      }`,
+      getAllRoom:`{
+        getAllRoom(token:"{token}"){
+          status
+          message
+          data{
+            _id
+            idTheater
+            roomNumber
+            roomName
+            numberChairs
+            cleaningTimes{
+              idMovieFormat
+              cleaningTime
             }
             active
           }
