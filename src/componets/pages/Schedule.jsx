@@ -99,8 +99,6 @@ export default class Schedule extends Component {
             } else if (!result.data[method].status) {
                 Helpers.showAlertError(result.message)
             } else if (Helpers.isNullOrEmpty(result.data[method].data)) {
-                let rooms = await this.getAllRoom();
-                //console.log(rooms);
                 this.setState({
                     schedule: [],
                     rooms: []
@@ -119,6 +117,9 @@ export default class Schedule extends Component {
     }
 
     processScheduleResult = (data) => {
+        data.rooms.map(r => {
+            return r.movies.sort(Helpers.sortObject('startAt'));
+        });
         return {
             ...data,
             rooms: data.rooms.map(r => {
