@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Helpers from '../../common/Helpers.js';
 import Storage from '../../common/Storage.js';
 import ScheduleRoom from '../partials/ScheduleRoom.jsx';
+import ModalScheduleAddMovie from '../modals/ModalScheduleAddMovie.jsx';
 import '../../assets/styles/Schedule.scss';
 
 
@@ -12,7 +13,9 @@ export default class Schedule extends Component {
         theaters: [],
         periods: [],
         schedule: [],
-        rooms: []
+        rooms: [],
+        viewModalScheduleAddMovie: false,
+        supportedFormats: []
     }
 
     constructor(props) {
@@ -147,12 +150,34 @@ export default class Schedule extends Component {
         }
     }
 
+    showModalScheduleAddMovie = (supportedFormats) => {
+        this.setState({
+            viewModalScheduleAddMovie: true,
+            supportedFormats
+        });
+    }
+
+    hideModalScheduleAddMovie = () => {
+        this.setState({
+            viewModalScheduleAddMovie: false
+        });
+    }
+
     render() {
         let ddStyle = {
             display: 'block'
         }
         return (
             <div>
+                {
+                    this.state.viewModalScheduleAddMovie ?
+                        <ModalScheduleAddMovie
+                            hideModal={this.hideModalScheduleAddMovie}
+                            supportedFormats={this.state.supportedFormats}
+                        />
+                        : null
+                }
+
                 <div className="divTitle">
                     Programación
                 </div>
@@ -192,7 +217,11 @@ export default class Schedule extends Component {
                         (this.state.rooms.length > 0) ?
                             this.state.schedule.rooms.map((schedule, index) => {
                                 return (
-                                    <ScheduleRoom key={index} room={schedule} />
+                                    <ScheduleRoom
+                                        key={index}
+                                        room={schedule}
+                                        showModalScheduleAddMovie={this.showModalScheduleAddMovie}
+                                    />
                                 );
                             })
                             : null

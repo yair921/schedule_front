@@ -25,27 +25,7 @@ class ScheduleMovie extends Component {
                 <div className="divScheduleMovieOthers">Trailer: {this.props.movie.trailer} min</div>
                 <div className="divScheduleMovieOthers">Pauta: {this.props.movie.pattern} min</div>
                 <div className="divScheduleMovieOthers">Corto: {this.props.movie.short} min</div>
-
-                {/* <div className="divScheduleMovieOption">
-                    <p>
-                        <label>
-                            <input type="checkbox" defaultChecked="checked" />
-                            <span>Trailers</span>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="checkbox" defaultChecked="checked" />
-                            <span>Pautas</span>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="checkbox" defaultChecked="checked" />
-                            <span>Corto</span>
-                        </label>
-                    </p>
-                </div> */}
+          
                 <div>{this.props.hasPattern}</div>
                 <div>{this.props.hasTrailer}</div>
                 <div>{this.props.hasShort}</div>

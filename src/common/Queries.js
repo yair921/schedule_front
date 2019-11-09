@@ -95,6 +95,10 @@ let queries = {
               idRoom
               roomName
               roomNumber
+              supportedFormats{
+                cleaningTime
+                idMovieFormat
+              }
               movies{
                 idMovie
                 movieName
@@ -125,6 +129,22 @@ let queries = {
               idMovieFormat
               cleaningTime
             }
+            active
+          }
+        }
+      }`,
+      getAllMovie:`{
+        getAllMovie(token:"{token}"){
+          status
+          message
+          data{
+            _id
+            idDistributor
+            idMovieFormat
+            idMovieLanguage
+            systemCode
+            movieName
+            duration
             active
           }
         }

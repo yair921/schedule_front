@@ -25,7 +25,11 @@ class ScheduleRoom extends Component {
                         : null
                 }
                 <div className="divScheduleRoomBtnAdd">
-                    <a id="btnAddMovie" className="waves-effect waves-light btn-small">Agregar</a>
+                    <a
+                        id="btnAddMovie"
+                        className="waves-effect waves-light btn-small"
+                        onClick={() => { this.props.showModalScheduleAddMovie(this.props.room.supportedFormats) }}
+                    >Agregar</a>
                 </div>
             </div>
         );
