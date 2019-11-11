@@ -1,0 +1,44 @@
+.divModalScheduleConfigMovie{
+    //display: flow-root;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.divModalScheduleConfigMovieMovie{
+    float: left;
+    width: 220px;
+    height: 500px;
+    // min-height: 150px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    transition:.3s;
+    padding: 5px;
+}
+
+.divScheduleConfigMovieTime{
+    width: 100%;
+    text-align: center;
+    font-size: small;
+    height: 70px;
+}
+
+.divScheduleConfigMovieMovie{
+    width: 100%;
+    min-height: 50px;
+    font-weight: bold;
+    font-size: small;
+    text-align: center;
+}
+
+.divScheduleConfigMovieOthers{
+    width: 100%;
+    text-align: center;
+    font-size: small;
+    height: 70px;
+}

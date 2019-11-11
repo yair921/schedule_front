@@ -8,8 +8,10 @@ const Queries = require('../../common/Queries.js');
 
 class ModalScheduleAddMovie extends Component {
     state = {
-        movies: []
+        movies: [],
     };
+
+    selectedMovies = [];
 
     constructor(props) {
         super(props);
@@ -21,8 +23,7 @@ class ModalScheduleAddMovie extends Component {
 
     getAllMovie = async () => {
         try {
-            console.log(this.props.supportedFormats);
-            let supportedFormats = this.props.supportedFormats;
+            let supportedFormats = this.props.selectedRoom.supportedFormats;
             let method = 'getAllMovie';
             let token = Storage.tokenSession;
             let query = Queries.getQuery(method, { token });
@@ -34,16 +35,11 @@ class ModalScheduleAddMovie extends Component {
             } else {
                 let moviesFilters = result.data[method].data.filter(f => {
                     for (let i in supportedFormats) {
-                        if (f.idMovieFormat ===supportedFormats[i].idMovieFormat){
+                        if (f.idMovieFormat === supportedFormats[i].idMovieFormat) {
                             return f;
                         }
                     }
                 });
-                // this.setState({
-                //     movies: result.data[method].data
-                // });
-                console.log(moviesFilters);
-                //debugger;
                 this.setState({
                     movies: moviesFilters
                 });
@@ -53,18 +49,60 @@ class ModalScheduleAddMovie extends Component {
         }
     }
 
+    selectMovie = (movie) => {
+        let index = null;
+        let divMoviePosition;
+        let element = document.getElementById(movie._id);
+        this.selectedMovies.filter((item, i) => {
+            if (item._id === movie._id) {
+                index = i;
+                return;
+            }
+        });
+        if (index !== null && typeof index !== 'undefined') {
+            divMoviePosition = document.getElementById(`divMoviePosition_${this.selectedMovies[index]._id}`);
+            divMoviePosition.innerHTML = '';
+            this.selectedMovies.splice(index, 1);
+            element.classList.remove('divModalScheduleAddMovieMovieSelected');
+        } else {
+            this.selectedMovies.push(movie);
+            element.classList.add('divModalScheduleAddMovieMovieSelected');
+        }
+        this.selectedMovies.forEach((e, i) => {
+            divMoviePosition = document.getElementById(`divMoviePosition_${e._id}`);
+            divMoviePosition.innerHTML = i + 1;
+        });
+        //console.log(this.selectedMovies);
+    }
+
     render() {
         return (
             <Modal
                 title="Agregar Películas"
                 hideModal={this.props.hideModal}
             >
-                <div>
+                <div className="divModalScheduleAddMovie">
                     {
                         this.state.movies.map((movie, index) => {
-                            return (<div key={index} className="divModalScheduleAddMovieMovie">{movie.movieName}</div>)
+                            return (
+                                <div
+                                    className="divModalScheduleAddMovieMovie"
+                                    key={index}
+                                    id={movie._id}
+                                    onClick={() => { this.selectMovie(movie) }}>
+                                    <div id={`divMoviePosition_${movie._id}`} className="divMoviePosition"></div>
+                                    {movie.movieName}
+                                </div>
+                            );
                         })
                     }
+                </div>
+                <div className="col s12 l2 right-align">
+                    <a
+                        className="waves-effect waves-light btn-small"
+                        id="btnNext"
+                        onClick={() => { this.props.showModalScheduleConfigMovies(this.props.room, this.selectedMovies) }}
+                    >Agregar</a>
                 </div>
             </Modal>
         );

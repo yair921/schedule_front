@@ -11,7 +11,6 @@ class ScheduleRoom extends Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <div className="divScheduleRoom">
                 <div className="divScheduleRoomTitle">{this.props.room.roomName}</div>
@@ -28,7 +27,7 @@ class ScheduleRoom extends Component {
                     <a
                         id="btnAddMovie"
                         className="waves-effect waves-light btn-small"
-                        onClick={() => { this.props.showModalScheduleAddMovie(this.props.room.supportedFormats) }}
+                        onClick={() => { this.props.showModalScheduleAddMovies(this.props.room) }}
                     >Agregar</a>
                 </div>
             </div>

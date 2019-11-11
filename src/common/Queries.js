@@ -103,9 +103,11 @@ let queries = {
                 idMovie
                 movieName
                 duration
-                trailer
-                short
-                pattern
+                scheduleAttributes{
+                  idScheduleAttribute
+                  scheduleAttributeName
+                  duration
+                }
                 cleaningTime
                 startAt
                 endAt
@@ -145,6 +147,18 @@ let queries = {
             systemCode
             movieName
             duration
+            active
+          }
+        }
+      }`,
+      getAllScheduleAttribute:`{
+        getAllScheduleAttribute(token:"{token}"){
+          status
+          message
+          data{
+            _id
+            scheduleAttributeName
+            defaultDuration
             active
           }
         }

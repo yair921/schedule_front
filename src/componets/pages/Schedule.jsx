@@ -4,6 +4,7 @@ import Helpers from '../../common/Helpers.js';
 import Storage from '../../common/Storage.js';
 import ScheduleRoom from '../partials/ScheduleRoom.jsx';
 import ModalScheduleAddMovie from '../modals/ModalScheduleAddMovie.jsx';
+import ModalScheduleConfigMovie from '../modals/ModalScheduleConfigMovie.jsx';
 import '../../assets/styles/Schedule.scss';
 
 
@@ -14,8 +15,10 @@ export default class Schedule extends Component {
         periods: [],
         schedule: [],
         rooms: [],
-        viewModalScheduleAddMovie: false,
-        supportedFormats: []
+        selectedRoom: {},
+        selectedMovies: [],
+        viewModalScheduleAddMovies: false,
+        viewModalScheduleConfigMovies: false
     }
 
     constructor(props) {
@@ -108,7 +111,6 @@ export default class Schedule extends Component {
                 });
             } else {
                 let data = this.processScheduleResult(result.data[method].data);
-                console.log(data);
                 this.setState({
                     schedule: data,
                     rooms: data.rooms
@@ -150,16 +152,35 @@ export default class Schedule extends Component {
         }
     }
 
-    showModalScheduleAddMovie = (supportedFormats) => {
+    showModalScheduleAddMovies = (room) => {
         this.setState({
-            viewModalScheduleAddMovie: true,
-            supportedFormats
+            viewModalScheduleAddMovies: true,
+            selectedRoom: room
         });
     }
 
-    hideModalScheduleAddMovie = () => {
+    hideModalScheduleAddMovies = () => {
         this.setState({
-            viewModalScheduleAddMovie: false
+            viewModalScheduleAddMovies: false
+        });
+    }
+
+    showModalScheduleConfigMovies = (room, movies) => {
+        if (movies.length === 0) {
+            Helpers.showAlertError('Please select one or more movies.');
+            return;
+        }
+        this.setState({
+            viewModalScheduleAddMovies: false,
+            viewModalScheduleConfigMovies: true,
+            selectedRoom: room,
+            selectedMovies: movies
+        });
+    }
+
+    hideModalScheduleConfigMovies = () => {
+        this.setState({
+            viewModalScheduleConfigMovies: false
         });
     }
 
@@ -170,10 +191,20 @@ export default class Schedule extends Component {
         return (
             <div>
                 {
-                    this.state.viewModalScheduleAddMovie ?
+                    this.state.viewModalScheduleAddMovies ?
                         <ModalScheduleAddMovie
-                            hideModal={this.hideModalScheduleAddMovie}
-                            supportedFormats={this.state.supportedFormats}
+                            hideModal={this.hideModalScheduleAddMovies}
+                            selectedRoom={this.state.selectedRoom}
+                            showModalScheduleConfigMovies={this.showModalScheduleConfigMovies}
+                        />
+                        : null
+                }
+                {
+                    this.state.viewModalScheduleConfigMovies ?
+                        <ModalScheduleConfigMovie
+                            hideModal={this.hideModalScheduleConfigMovies}
+                            selectedRoom={this.state.selectedRoom}
+                            selectedMovies={this.state.selectedMovies}
                         />
                         : null
                 }
@@ -215,12 +246,13 @@ export default class Schedule extends Component {
                 <div className="divScheduleRoomMain">
                     {
                         (this.state.rooms.length > 0) ?
-                            this.state.schedule.rooms.map((schedule, index) => {
+                            this.state.schedule.rooms.map((room, index) => {
                                 return (
                                     <ScheduleRoom
                                         key={index}
-                                        room={schedule}
-                                        showModalScheduleAddMovie={this.showModalScheduleAddMovie}
+                                        room={room}
+                                        showModalScheduleAddMovies={this.showModalScheduleAddMovies}
+                                        showModalScheduleConfigMovies={this.showModalScheduleConfigMovies}
                                     />
                                 );
                             })
