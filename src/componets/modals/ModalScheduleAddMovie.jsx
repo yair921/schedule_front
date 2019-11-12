@@ -40,6 +40,7 @@ class ModalScheduleAddMovie extends Component {
                         }
                     }
                 });
+                moviesFilters.sort(Helpers.sortObject('movieName'));
                 this.setState({
                     movies: moviesFilters
                 });
@@ -101,7 +102,7 @@ class ModalScheduleAddMovie extends Component {
                     <a
                         className="waves-effect waves-light btn-small"
                         id="btnNext"
-                        onClick={() => { this.props.showModalScheduleConfigMovies(this.props.room, this.selectedMovies) }}
+                        onClick={() => { this.props.showModalScheduleConfigMovies(this.props.selectedRoom, this.selectedMovies) }}
                     >Agregar</a>
                 </div>
             </Modal>

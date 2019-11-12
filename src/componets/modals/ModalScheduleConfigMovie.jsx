@@ -11,17 +11,30 @@ class ModalScheduleConfigMovie extends Component {
         scheduleAttributes: []
     };
 
+    selectedMovies = new Array();
+
     constructor(props) {
         super(props);
+        this.selectedMovies = this.props.selectedMovies;
     }
 
     componentDidMount = () => {
         this.getAllScheduleAttribute();
     }
 
+    getCleaningTime = (idMovieFormat) => {
+        let objSupportedFormat = this.props.selectedRoom.supportedFormats.filter(supportedFormat => {
+            if (supportedFormat.idMovieFormat.toString() === idMovieFormat)
+                return supportedFormat;
+        });
+        if (objSupportedFormat && objSupportedFormat.length > 0)
+            return objSupportedFormat[0].cleaningTime;
+        else
+            return 0;
+    }
+
     getAllScheduleAttribute = async () => {
         try {
-            //debugger
             let method = 'getAllScheduleAttribute';
             let token = Storage.tokenSession;
             let query = Queries.getQuery(method, { token });
@@ -31,7 +44,6 @@ class ModalScheduleConfigMovie extends Component {
             } else if (!result.data[method].status) {
                 Helpers.showAlertError(result.message)
             } else {
-                //console.log(result);
                 this.setState({
                     scheduleAttributes: result.data[method].data
                 });
@@ -39,6 +51,98 @@ class ModalScheduleConfigMovie extends Component {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    getTotalDuration = (idParentElement) => {
+        let inputStartAt = document.getElementById(`timeStartAt_${idParentElement}`).value;
+        let inputEndAt = document.getElementById(`timeEndAt_${idParentElement}`);
+        if (Helpers.isNullOrEmpty(inputStartAt)) {
+            for (let i in this.selectedMovies) {
+                if (this.selectedMovies[i]._id === idParentElement) {
+                    delete this.selectedMovies[i].scheduleAttributes;
+                    delete this.selectedMovies[i].startAt;
+                    delete this.selectedMovies[i].endAt;
+                    delete this.selectedMovies[i].cleaningTime;
+                    break;
+                }
+            }
+            inputEndAt.value = '';
+            return;
+        }
+
+        let dateStr = '2000-01-01';
+        let hourValidate = parseInt(inputStartAt.split(':')[0]);
+        if (hourValidate < 5) {
+            dateStr = '2000-01-02';
+        }
+        let inputMovieDuration = document.getElementById(`numberMovieDuration_${idParentElement}`).value;
+        let inputCleaningTime = document.getElementById(`numberMovieCleaning_${idParentElement}`).value;
+        let minutes = parseInt(inputMovieDuration) + parseInt(inputCleaningTime);
+        let elementScheduleAttribute;
+
+        let tempScheduleAttributes = new Array();
+        this.state.scheduleAttributes.forEach(sa => {
+            elementScheduleAttribute = document.getElementById(`${idParentElement}_${sa._id}`).value;
+            elementScheduleAttribute = parseInt(elementScheduleAttribute);
+            if (elementScheduleAttribute) {
+                minutes = minutes + parseInt(elementScheduleAttribute);
+                tempScheduleAttributes.push({
+                    idScheduleAttribute: sa._id,
+                    scheduleAttributeName: sa.scheduleAttributeName,
+                    duration: elementScheduleAttribute
+                });
+            }
+        });
+        let startDate = new Date(`${dateStr} ${inputStartAt}:00`);
+
+        let endDate = new Date(startDate.getTime() + (minutes * 60000));
+        let endHour = endDate.getHours();
+        let endMinutes = endDate.getMinutes();
+        endHour = endHour.toString().length === 1 ? `0${endHour}` : endHour;
+        endMinutes = endMinutes.toString().length === 1 ? `0${endMinutes}` : endMinutes;
+        inputEndAt.value = `${endHour}:${endMinutes}`;
+
+        let paramsUpdateSelectedMovies = {
+            idMovie: idParentElement,
+            scheduleAttributes: tempScheduleAttributes,
+            cleaningTime: parseInt(inputCleaningTime),
+            startAt: startDate,
+            endAt: endDate
+        }
+        this.updateSelectedMovies(paramsUpdateSelectedMovies);
+    }
+
+    updateSelectedMovies = (params) => {
+        let newSelectedMovies = this.selectedMovies.map(sm => {
+            if (sm._id === params.idMovie) {
+                return {
+                    ...sm,
+                    scheduleAttributes: params.scheduleAttributes,
+                    cleaningTime: params.cleaningTime,
+                    startAt: params.startAt,
+                    endAt: params.endAt
+                }
+            }
+            return sm;
+        });
+        this.selectedMovies = newSelectedMovies;
+    }
+
+    addMovies = () => {
+        let selectedMovies = this.selectedMovies.map(sm => {
+            if (!Helpers.isNullOrEmpty(sm.scheduleAttributes)) {
+                return {
+                    idMovie: sm._id,
+                    movieName: sm.movieName,
+                    scheduleAttributes: sm.scheduleAttributes,
+                    startAt: sm.startAt,
+                    endAt: sm.endAt,
+                    cleaningTime: sm.cleaningTime
+                };
+            }
+        });
+        debugger
+        this.props.addMovies(this.props.selectedRoom, selectedMovies);
     }
 
     render() {
@@ -54,21 +158,22 @@ class ModalScheduleConfigMovie extends Component {
                                 <div
                                     className="divModalScheduleConfigMovieMovie"
                                     key={index}
-                                    id={movie._id}>
-                                    <div className="divScheduleConfigMovieMovie">{movie.movieName}</div>
-                                    <div className="divScheduleConfigMovieTime"><span>Hora de inicio</span><input type="time" id="inputStartAt" /></div>
-                                    <div className="divScheduleConfigMovieOthers">Duración: <input type="number" id="inputDuration" /></div>
+                                    id={`divMovie_${movie._id}`}>
+                                    <div id={`divMovieName_${movie.movieName}`} className="divScheduleConfigMovieMovie">{movie.movieName}</div>
+                                    <div className="divScheduleConfigMovieTime"><span>Hora de inicio</span><input type="time" className="inputScheduleConfigMovie" id={`timeStartAt_${movie._id}`} onChange={() => this.getTotalDuration(movie._id)} /></div>
                                     {
                                         this.state.scheduleAttributes.length > 0 &&
-                                        this.state.scheduleAttributes.map((m, index) => {
+                                        this.state.scheduleAttributes.map((sa, sa_index) => {
                                             return (
-                                                <div 
-                                                key={index} 
-                                                className="divScheduleConfigMovieOthers">{m.scheduleAttributeName}: <input type="number" id={m._id} defaultValue={m.defaultDuration} /></div>
+                                                <div
+                                                    key={sa_index}
+                                                    className="divScheduleConfigMovieOthers">{sa.scheduleAttributeName} <input type="number" id={`${movie._id}_${sa._id}`} className="inputScheduleConfigMovie" defaultValue={sa.defaultDuration} onChange={() => this.getTotalDuration(movie._id)} /></div>
                                             );
                                         })
                                     }
-                                    <div className="divScheduleConfigMovieTime">Hora Finalización <input type="time" id="inputEndAt" /></div>
+                                    <div className="divScheduleConfigMovieOthers">Duración <input type="number" id={`numberMovieDuration_${movie._id}`} className="inputScheduleConfigMovie" defaultValue={movie.duration} disabled /></div>
+                                    <div className="divScheduleConfigMovieOthers">Limpieza <input type="number" id={`numberMovieCleaning_${movie._id}`} className="inputScheduleConfigMovie" disabled defaultValue={this.getCleaningTime(movie.idMovieFormat)} /></div>
+                                    <div className="divScheduleConfigMovieTime">Hora Finalización <input type="time" id={`timeEndAt_${movie._id}`} className="inputScheduleConfigMovie" disabled /></div>
                                 </div>
                             );
                         })
@@ -78,6 +183,7 @@ class ModalScheduleConfigMovie extends Component {
                     <a
                         className="waves-effect waves-light btn-small"
                         id="btnNext"
+                        onClick={this.addMovies}
                     >Agregar</a>
                 </div>
             </Modal>

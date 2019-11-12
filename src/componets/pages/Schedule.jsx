@@ -184,6 +184,43 @@ export default class Schedule extends Component {
         });
     }
 
+    addMovies = (selectedRoom, selectedMovies) => {
+        //this.hideModalScheduleConfigMovies();
+        // console.log(selectedRoom);
+        // console.log(selectedMovies);
+        // console.log(this.state.schedule);
+
+
+        if (Helpers.isNullOrEmpty(selectedMovies)
+            || Helpers.isNullOrEmpty(selectedMovies[0])) {
+            this.setState({
+                viewModalScheduleConfigMovies: false,
+            });
+            return;
+        }
+
+        let newRooms = this.state.schedule.rooms.map(r => {
+            if (r.idRoom === selectedRoom.idRoom) {
+                return {
+                    ...r,
+                    movies: r.movies.concat(selectedMovies)
+                }
+            }
+            return r;
+        });
+        debugger
+        newRooms.map(r => {
+            return r.movies.sort((a, b) => a.startAt - b.startAt);
+        });
+        this.setState({
+            viewModalScheduleConfigMovies: false,
+            schedule: {
+                ...this.state.schedule,
+                rooms: newRooms
+            }
+        });
+    }
+
     render() {
         let ddStyle = {
             display: 'block'
@@ -205,6 +242,7 @@ export default class Schedule extends Component {
                             hideModal={this.hideModalScheduleConfigMovies}
                             selectedRoom={this.state.selectedRoom}
                             selectedMovies={this.state.selectedMovies}
+                            addMovies={this.addMovies}
                         />
                         : null
                 }
