@@ -129,19 +129,19 @@ class ModalScheduleConfigMovie extends Component {
     }
 
     addMovies = () => {
-        let selectedMovies = this.selectedMovies.map(sm => {
+        let selectedMovies = new Array();
+        this.selectedMovies.forEach(sm => {
             if (!Helpers.isNullOrEmpty(sm.scheduleAttributes)) {
-                return {
+                selectedMovies.push({
                     idMovie: sm._id,
                     movieName: sm.movieName,
                     scheduleAttributes: sm.scheduleAttributes,
                     startAt: sm.startAt,
                     endAt: sm.endAt,
                     cleaningTime: sm.cleaningTime
-                };
+                });
             }
         });
-        debugger
         this.props.addMovies(this.props.selectedRoom, selectedMovies);
     }
 

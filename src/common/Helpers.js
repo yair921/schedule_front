@@ -3,7 +3,7 @@ const Config = require('../../config.js');
 
 class Helpers {
 
-    static async post(query) {
+    static async post(query, schedule) {
         const url = Config.urls.api;
         const opts = {
             method: "POST",

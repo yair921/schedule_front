@@ -117,6 +117,13 @@ let queries = {
           }
         }
       }`,
+      addSchedule:`mutation{
+        addSchedule(token:"{token}",input:{idPeriod:"{idPeriod}",idTheater:"{idTheater}",rooms:{rooms}}){
+          status
+          message
+          _id
+        }
+      }`,
       getAllRoom:`{
         getAllRoom(token:"{token}"){
           status

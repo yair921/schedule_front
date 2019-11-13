@@ -208,7 +208,6 @@ export default class Schedule extends Component {
             }
             return r;
         });
-        debugger
         newRooms.map(r => {
             return r.movies.sort((a, b) => a.startAt - b.startAt);
         });
@@ -219,6 +218,63 @@ export default class Schedule extends Component {
                 rooms: newRooms
             }
         });
+    }
+
+    saveSchedule = () => {
+        //console.log(this.state.schedule);
+        let newRooms = this.state.schedule.rooms.map(room => {
+            return {
+                idRoom: room.idRoom,
+                movies: room.movies.map(movie => {
+                    return {
+                        idMovie: movie.idMovie,
+                        scheduleAttributes: movie.scheduleAttributes,
+                        cleaningTime: movie.cleaningTime,
+                        startAt: movie.startAt.toISOString(),
+                        endAt: movie.endAt.toISOString()
+                    }
+                })
+            }
+        });
+        //console.log(newRooms);
+        if (Helpers.isNullOrEmpty(this.state.schedule._id)) {
+            this.add(newRooms);
+        } else {
+            // update
+        }
+    }
+
+    add = async (rooms) => {
+        try {
+            //this.handleLoading();
+            let method = 'addSchedule';
+            let token = Storage.tokenSession;
+            let idTheater = this.state.schedule.idTheater;
+            let idPeriod = this.state.schedule.idPeriod;
+            let query = Queries.getQuery(method, { token, idTheater, idPeriod, rooms: JSON.stringify(rooms) });
+            query = query.replace(/\"([^(\")"]+)\":/g, "$1:");
+            //console.log(query);
+            let result = await Helpers.post(query);
+            if (!result.status) {
+                //this.closeLoading();
+                Helpers.showAlertError(result.message);
+            } else if (!result.data[method].status) {
+                //this.closeLoading();
+                Helpers.showAlertError(result.data[method].message);
+            } else {
+                //this.closeLoading();
+                console.log(result);
+                this.setState({
+                    schedule: {
+                        ...this.state.schedule,
+                        _id: result.data[method]._id
+                    }
+                });
+                Helpers.showAlertAdd();
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     render() {
@@ -277,7 +333,7 @@ export default class Schedule extends Component {
                         </select>
                     </div>
                     <div className="col s12 l2 right-align">
-                        <a className="waves-effect waves-light btn-small">Guardar</a>
+                        <a className="waves-effect waves-light btn-small" onClick={this.saveSchedule}>Guardar</a>
                     </div>
                 </div>
                 <div className="divDivider"></div>
