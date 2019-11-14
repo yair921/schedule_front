@@ -18,7 +18,12 @@ class ScheduleRoom extends Component {
                     this.props.room.movies.length > 0 ?
                         this.props.room.movies.map((movie, index) => {
                             return (
-                                <ScheduleMovie key={index} movie={movie} />
+                                <ScheduleMovie 
+                                key={index} 
+                                movie={movie}
+                                idElementMovie={`${this.props.room.idRoom}_${movie.idMovie}`} 
+                                showModalScheduleEditMovie={this.props.showModalScheduleEditMovie}
+                                />
                             )
                         })
                         : null

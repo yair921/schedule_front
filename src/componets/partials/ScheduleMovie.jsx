@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Helpers from '../../common/Helpers.js';
 import '../../assets/styles/ScheduleMovie.scss';
 
 class ScheduleMovie extends Component {
@@ -14,10 +15,13 @@ class ScheduleMovie extends Component {
     }
 
     render() {
-        let startAt = this.getTime(this.props.movie.startAt);
-        let endAt = this.getTime(this.props.movie.endAt);
+        let startAt = Helpers.getTime(this.props.movie.startAt);
+        let endAt = Helpers.getTime(this.props.movie.endAt);
         return (
-            <div className="divScheduleMovie">
+            <div
+                className="divScheduleMovie"
+                id={this.props.idElementMovie}
+                onClick={() => this.props.showModalScheduleEditMovie(this.props.idElementMovie)}>
                 <div className="divScheduleMovieTime">{startAt}</div>
                 <div className="divScheduleMovieMovie">{this.props.movie.movieName}</div>
                 {

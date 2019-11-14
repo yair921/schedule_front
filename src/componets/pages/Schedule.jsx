@@ -5,6 +5,7 @@ import Storage from '../../common/Storage.js';
 import ScheduleRoom from '../partials/ScheduleRoom.jsx';
 import ModalScheduleAddMovie from '../modals/ModalScheduleAddMovie.jsx';
 import ModalScheduleConfigMovie from '../modals/ModalScheduleConfigMovie.jsx';
+import ModalScheduleEditMovie from '../modals/ModalScheduleEditMovie.jsx';
 import '../../assets/styles/Schedule.scss';
 
 
@@ -17,8 +18,10 @@ export default class Schedule extends Component {
         rooms: [],
         selectedRoom: {},
         selectedMovies: [],
+        selectedMovies: {},
         viewModalScheduleAddMovies: false,
-        viewModalScheduleConfigMovies: false
+        viewModalScheduleConfigMovies: false,
+        viewModalScheduleEditMovie: false
     }
 
     constructor(props) {
@@ -184,13 +187,33 @@ export default class Schedule extends Component {
         });
     }
 
+    showModalScheduleEditMovie = (idElementMovie) => {
+        let ids = idElementMovie.split('_');
+        let idRoom = ids[0];
+        let idMovie = ids[1];
+
+        let roomSelected = this.state.schedule.rooms.filter(room => {
+            return room.idRoom === idRoom;
+        })[0];
+
+        let movieSeleted = roomSelected.movies.filter(movie => {
+            return movie.idMovie === idMovie
+        })[0];
+        
+        this.setState({
+            viewModalScheduleEditMovie: true,
+            selectedRoom: roomSelected,
+            selectedMovie: movieSeleted
+        });
+    }
+
+    hideModalScheduleEditMovie = () => {
+        this.setState({
+            viewModalScheduleEditMovie: false
+        });
+    }
+
     addMovies = (selectedRoom, selectedMovies) => {
-        //this.hideModalScheduleConfigMovies();
-        // console.log(selectedRoom);
-        // console.log(selectedMovies);
-        // console.log(this.state.schedule);
-
-
         if (Helpers.isNullOrEmpty(selectedMovies)
             || Helpers.isNullOrEmpty(selectedMovies[0])) {
             this.setState({
@@ -221,7 +244,6 @@ export default class Schedule extends Component {
     }
 
     saveSchedule = () => {
-        //console.log(this.state.schedule);
         let newRooms = this.state.schedule.rooms.map(room => {
             return {
                 idRoom: room.idRoom,
@@ -236,7 +258,6 @@ export default class Schedule extends Component {
                 })
             }
         });
-        //console.log(newRooms);
         if (Helpers.isNullOrEmpty(this.state.schedule._id)) {
             this.add(newRooms);
         } else {
@@ -302,6 +323,16 @@ export default class Schedule extends Component {
                         />
                         : null
                 }
+                {
+                    this.state.viewModalScheduleEditMovie ?
+                        <ModalScheduleEditMovie
+                            hideModal={this.hideModalScheduleEditMovie}
+                            selectedRoom={this.state.selectedRoom}
+                            selectedMovie={this.state.selectedMovie}
+                            showModalScheduleEditMovie={this.showModalScheduleEditMovie}
+                        />
+                        : null
+                }
 
                 <div className="divTitle">
                     Programación
@@ -347,6 +378,7 @@ export default class Schedule extends Component {
                                         room={room}
                                         showModalScheduleAddMovies={this.showModalScheduleAddMovies}
                                         showModalScheduleConfigMovies={this.showModalScheduleConfigMovies}
+                                        showModalScheduleEditMovie={this.showModalScheduleEditMovie}
                                     />
                                 );
                             })

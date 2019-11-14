@@ -230,6 +230,17 @@ class Helpers {
             return 0;
         }
     }
+
+    static getTime = (date) => {
+        let dateConvert = new Date(date.toString());
+        let hour = dateConvert.getHours();
+        let minutes = dateConvert.getMinutes();
+
+        hour = hour.toString().length === 1 ? `0${hour}` : hour
+        minutes = minutes.toString().length === 1 ? `0${minutes}` : minutes
+
+        return `${hour}:${minutes}`;
+    }
 }
 
 export default Helpers;
