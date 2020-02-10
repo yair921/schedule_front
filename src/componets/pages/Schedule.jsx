@@ -345,7 +345,7 @@ export default class Schedule extends Component {
                             {
                                 this.state.theaters.map((theater, index) => {
                                     return (
-                                        <option key={index} value={theater._id}>{theater.nombre}</option>
+                                        <option key={index} value={theater._id}>{theater.nameTheater}</option>
                                     )
                                 })
                             }

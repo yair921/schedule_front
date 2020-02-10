@@ -129,6 +129,7 @@ class ModalScheduleConfigMovie extends Component {
     }
 
     addMovies = () => {
+        debugger;
         let selectedMovies = new Array();
         this.selectedMovies.forEach(sm => {
             if (!Helpers.isNullOrEmpty(sm.scheduleAttributes)) {

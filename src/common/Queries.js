@@ -54,7 +54,7 @@ let queries = {
           message
           data{
             _id
-            nombre
+            nameTheater
             active
           }
         }
